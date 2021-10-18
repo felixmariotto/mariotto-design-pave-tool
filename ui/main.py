@@ -18,10 +18,13 @@ class Form(forms.Form):
     
     # Initializer
     def __init__(self):
-        self.Rnd = System.Random()
-        self.Title = "Sample Eto Tabbed Dialog"
+        # basic style
+        self.Title = "rhino_awesome_pave"
         self.Padding = drawing.Padding(10)
         self.Resizable = True
+        # state management
+        self.tab_count = 0
+        # content
         self.Content = self.Create()
     
     # Create the dialog content
@@ -29,8 +32,7 @@ class Form(forms.Form):
         # create default tab
         self.TabControl = forms.TabControl()
         self.TabControl.TabPosition = forms.DockPosition.Top
-        tab = pavetab.Form()
-        self.TabControl.Pages.Add(tab)
+        self.CreateTab()
         # create stack layout item for tabs
         tab_items = forms.StackLayoutItem(self.TabControl, True)
         # create layout for buttons
@@ -49,16 +51,21 @@ class Form(forms.Form):
         layout.Items.Add(tab_items)
         return layout
     
+    # add a new tab to self.TabControl
+    def CreateTab(self):
+        self.tab_count += 1
+        tab = pavetab.Form( str(self.tab_count) )
+        self.TabControl.Pages.Add(tab)
+    
     # AddTab button click handler
     def AddTabClick(self, sender, e):
-        # tab.Text = "Tab" + str(self.TabControl.Pages.Count + 1)
-        tab = pavetab.Form()
-        self.TabControl.Pages.Add(tab)
+        print( self.TabControl.Pages[0].Text )
+        self.CreateTab()
     
     # Creates an add tab button
     def AddTab(self):
         button = forms.Button()
-        button.Text = "Add Tab"
+        button.Text = "New Pave"
         button.Click += self.AddTabClick
         return button
     
@@ -70,6 +77,6 @@ class Form(forms.Form):
     # Creates a remove tab button
     def RemoveTab(self):
         button = forms.Button()
-        button.Text = "Remove Tab"
+        button.Text = "Delete Pave"
         button.Click += self.RemoveTabClick
         return button

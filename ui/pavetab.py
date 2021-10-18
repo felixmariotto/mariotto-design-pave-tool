@@ -17,10 +17,10 @@ class TabContent(forms.Panel):
         #
         self.Content = layout
 
-class Form(forms.TabPage):
-    
-    def __init__(self):
-        self.Text = "pave n"
-        control = forms.Panel()
-        control.Content = TabContent()
-        self.Content = control
+def Form(name):
+    tp = forms.TabPage()
+    tp.Text = "pave " + name
+    control = forms.Panel()
+    control.Content = TabContent()
+    tp.Content = control
+    return tp
