@@ -7,11 +7,13 @@ class c:
     
     def __init__(self):
         self.circle_center = Rhino.Geometry.Point3d(0, 0, 0)
+        self.up = Rhino.Geometry.Vector3d(0, 0, 1)
     
     # dynamic redraw callback, to update the position of the gem
     # while the user moves the cursor on the surface.
     def callback(self, sender, args):
         try:
+            # translate the gem
             translation = args.CurrentPoint - self.circle_center
             
             self.circle_center.X = args.CurrentPoint.X
@@ -19,8 +21,18 @@ class c:
             self.circle_center.Z = args.CurrentPoint.Z
             
             xf = Rhino.Geometry.Transform.Translation(translation)
-        
             sc.doc.Objects.Transform(self.circleID, xf, True)
+            
+            # rotate the gem
+            res = self.surf.ClosestPoint( args.CurrentPoint )
+            norm = self.surf.NormalAt(res[1], res[2])
+            xf = Rhino.Geometry.Transform.Rotation(self.up, norm, args.CurrentPoint)
+            sc.doc.Objects.Transform(self.circleID, xf, True)
+            self.up.X = norm.X
+            self.up.Y = norm.Y
+            self.up.Z = norm.Z
+            
+            # redraw
             sc.doc.Views.Redraw()
         except Exception, e:
             print(e)
@@ -31,6 +43,11 @@ class c:
             self.circle_center.X = 0
             self.circle_center.Y = 0
             self.circle_center.Z = 0
+            
+            # reset the circle up vector, which will be updated in the callback
+            self.up.X = 0
+            self.up.Y = 0
+            self.up.Z = 1
             
             # create a new circle
             circle = Rhino.Geometry.Circle(1)
