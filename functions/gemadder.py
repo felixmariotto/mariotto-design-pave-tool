@@ -1,6 +1,7 @@
 
 import Rhino
 import scriptcontext as sc
+import rhinoscriptsyntax as rs
 
 class c:
     
@@ -26,29 +27,36 @@ class c:
     
     def addGem(self):
         
-        # reset the circle position that will be updated in the callback
-        self.circle_center.X = 0
-        self.circle_center.Y = 0
-        self.circle_center.Z = 0
-        
-        # create a new circle
-        circle = Rhino.Geometry.Circle(1)
-        self.circleID = sc.doc.Objects.AddCircle(circle)
-        
-        #
-        gp = Rhino.Input.Custom.GetPoint()
-        gp.Constrain( self.surf, False )
-        gp.DynamicDraw += self.callback
-        gp.Get()
-        if gp.CommandResult() != Rhino.Commands.Result.Success:
-            return False
-        return True
+        try:
+            # reset the circle position that will be updated in the callback
+            self.circle_center.X = 0
+            self.circle_center.Y = 0
+            self.circle_center.Z = 0
+            
+            # create a new circle
+            circle = Rhino.Geometry.Circle(1)
+            self.circleID = sc.doc.Objects.AddCircle(circle)
+            
+            #
+            gp = Rhino.Input.Custom.GetPoint()
+            gp.Constrain( self.surf, False )
+            gp.DynamicDraw += self.callback
+            gp.Get()
+            if gp.CommandResult() != Rhino.Commands.Result.Success:
+                # remove the gem
+                rs.DeleteObject( self.circleID )
+                # return false so that the endless loop of circle positioning is terminated
+                return False
+            else :
+                return True
+        except Exception, e:
+            print(e)
     
     def addGems(self):
         
         # get the surface on which to position the gem
         go = Rhino.Input.Custom.GetObject()
-        go.SetCommandPrompt('select the surface on which to orient a circle')
+        go.SetCommandPrompt('select the surface on which to orient a gem')
         go.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
         go.Get()
         if go.CommandResult() != Rhino.Commands.Result.Success:
