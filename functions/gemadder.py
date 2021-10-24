@@ -26,7 +26,6 @@ class c:
             print(e)
     
     def addGem(self):
-        
         try:
             # reset the circle position that will be updated in the callback
             self.circle_center.X = 0
@@ -40,6 +39,7 @@ class c:
             #
             gp = Rhino.Input.Custom.GetPoint()
             gp.Constrain( self.surf, False )
+            gp.PermitObjectSnap(False)
             gp.DynamicDraw += self.callback
             gp.Get()
             if gp.CommandResult() != Rhino.Commands.Result.Success:
@@ -53,7 +53,6 @@ class c:
             print(e)
     
     def addGems(self):
-        
         # get the surface on which to position the gem
         go = Rhino.Input.Custom.GetObject()
         go.SetCommandPrompt('select the surface on which to orient a gem')
