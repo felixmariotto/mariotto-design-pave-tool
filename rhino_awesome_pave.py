@@ -10,7 +10,12 @@ from imp import reload
 from ui import main
 reload(main)
 
+from functions import handler
+reload(handler)
+
 import Rhino.UI
+
+main.Form.H = handler.Handler
 
 def rhino_awesome_pave():
     form = main.Form()

@@ -20,6 +20,7 @@ class Form(forms.Form):
     def __init__(self):
         # basic style
         self.Title = "rhino_awesome_pave"
+        self.ClientSize = drawing.Size(300, 200)
         self.Padding = drawing.Padding(10)
         self.Resizable = True
         # state management
@@ -54,7 +55,7 @@ class Form(forms.Form):
     # add a new tab to self.TabControl
     def CreateTab(self):
         self.tab_count += 1
-        tab = pavetab.Form( str(self.tab_count) )
+        tab = pavetab.Form( str(self.tab_count), self.H() )
         self.TabControl.Pages.Add(tab)
     
     # AddTab button click handler
