@@ -24,17 +24,7 @@ class c:
         except Exception, e:
             print(e)
     
-    def addGems(self):
-        
-        # get the surface on which to position the gem
-        go = Rhino.Input.Custom.GetObject()
-        go.SetCommandPrompt('select the surface on which to orient a circle')
-        go.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
-        go.Get()
-        if go.CommandResult() != Rhino.Commands.Result.Success:
-            return
-        obj_ref = go.Object(0)
-        self.surf = obj_ref.Geometry().Surfaces[0]
+    def addGem(self):
         
         # reset the circle position that will be updated in the callback
         self.circle_center.X = 0
@@ -50,3 +40,24 @@ class c:
         gp.Constrain( self.surf, False )
         gp.DynamicDraw += self.callback
         gp.Get()
+        if gp.CommandResult() != Rhino.Commands.Result.Success:
+            return False
+        return True
+    
+    def addGems(self):
+        
+        # get the surface on which to position the gem
+        go = Rhino.Input.Custom.GetObject()
+        go.SetCommandPrompt('select the surface on which to orient a circle')
+        go.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
+        go.Get()
+        if go.CommandResult() != Rhino.Commands.Result.Success:
+            return
+        obj_ref = go.Object(0)
+        self.surf = obj_ref.Geometry().Surfaces[0]
+        
+        while self.addGem():
+            pass
+        else:
+            pass
+            # do something when all gems have been positioned
