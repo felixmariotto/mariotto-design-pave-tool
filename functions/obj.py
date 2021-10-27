@@ -22,3 +22,14 @@ class Object3D(object):
         self.normal.Y = y
         self.normal.Z = z
         self.normal.Unitize()
+    
+    def copyPosition( self, point ):
+        self.position.X = point.X
+        self.position.Y = point.Y
+        self.position.Z = point.Z
+    
+    def copyNormal( self, vector ):
+        self.normal.X = vector.X
+        self.normal.Y = vector.Y
+        self.normal.Z = vector.Z
+        self.normal.Unitize()
