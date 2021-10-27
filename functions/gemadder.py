@@ -24,20 +24,18 @@ class c:
             self.gem_center.Y = args.CurrentPoint.Y
             self.gem_center.Z = args.CurrentPoint.Z
             
-            xf = Rhino.Geometry.Transform.Translation(translation)
-            sc.doc.Objects.Transform(self.circleID, xf, True)
+            self.g.copyPosition( self.gem_center )
             
             # rotate the gem
             res = self.surf.ClosestPoint( args.CurrentPoint )
             norm = self.surf.NormalAt(res[1], res[2])
-            xf = Rhino.Geometry.Transform.Rotation(self.up, norm, args.CurrentPoint)
-            sc.doc.Objects.Transform(self.circleID, xf, True)
+            
+            self.g.copyNormal( norm )
+            
             self.up.X = norm.X
             self.up.Y = norm.Y
             self.up.Z = norm.Z
             
-            # redraw
-            sc.doc.Views.Redraw()
         except Exception, e:
             print(e)
     
@@ -54,18 +52,16 @@ class c:
             self.up.Z = 1
             
             # create a new gem
-            circle = Rhino.Geometry.Circle(1)
-            self.circleID = sc.doc.Objects.AddCircle(circle)
+            self.g = gem.Gem()
             
             #
             gp = Rhino.Input.Custom.GetPoint()
-            gp.Constrain( self.surf, False )
+            gp.Constrain(self.surf, False)
             gp.PermitObjectSnap(False)
             gp.DynamicDraw += self.callback
             gp.Get()
             if gp.CommandResult() != Rhino.Commands.Result.Success:
-                # remove the gem
-                rs.DeleteObject( self.circleID )
+                self.g.dispose()
                 # return false so that the endless loop of circle positioning is terminated
                 return False
             else :

@@ -28,12 +28,23 @@ class Gem(obj.Object3D):
         #
         sc.doc.Views.Redraw()
     
+    def dispose(self):
+        print('dispose gem')
+    
     def setPosition(self, x, y, z):
         obj.Object3D.setPosition(self, x, y, z)
         self.updateContent()
     
+    def copyPosition(self, point):
+        obj.Object3D.copyPosition(self, point)
+        self.updateContent()
+    
     def setNormal(self, x, y, z):
         obj.Object3D.setNormal(self, x, y, z)
+        self.updateContent()
+    
+    def copyNormal(self, vector):
+        obj.Object3D.copyNormal(self, vector)
         self.updateContent()
     
     def Cylinder(self):
