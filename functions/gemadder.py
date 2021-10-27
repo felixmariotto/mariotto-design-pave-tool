@@ -2,6 +2,10 @@
 import Rhino
 import scriptcontext as sc
 import rhinoscriptsyntax as rs
+import gem
+from imp import reload
+
+reload(gem)
 
 class c:
     

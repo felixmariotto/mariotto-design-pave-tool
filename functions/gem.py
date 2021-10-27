@@ -2,33 +2,29 @@
 import Rhino
 import scriptcontext as sc
 from random import random
+from imp import reload
+import obj
 
-awesome_gem_count = 0
+reload(obj)
 
-class Gem(object):
+class Gem(obj.Object3D):
+    
+    group = sc.doc.Groups.Add()
     
     def __init__(self, radius=1):
-        self.position = Rhino.Geometry.Point3d(0,0,0)
-        self.normal = Rhino.Geometry.Vector3d(0,0,1)
+        super(Gem, self).__init__()
         self.radius = radius
-        self.name = 'gem ' + str( int( random() * 10e10 ) )
-        self.group = sc.doc.Groups.Add(  )
-        print( self.name )
+        # self.name = 'gem ' + str( int( random() * 10e10 ) )
+        self.group = sc.doc.Groups.Add()
+        self.makeGeometry()
     
-    def setPosition( self, x, y, z ):
-        self.position.X = x
-        self.position.Y = y
-        self.position.Z = z
-    
-    def setNormal( self, x, y, z ):
-        self.normal.X = x
-        self.normal.Y = y
-        self.normal.Z = z
-        self.normal.Unitize()
-    
-    def draw(self):
+    def makeGeometry(self):
         cylinder = self.Cylinder()
+        cylinder.SetUserString( 'foo', '42' )
+        # print( cylinder.GetUserString('foo') )
         cylinderID = sc.doc.Objects.AddBrep(cylinder)
+    
+    def updateGeometry(self):
         sc.doc.Views.Redraw()
     
     def Cylinder(self):
@@ -37,7 +33,7 @@ class Gem(object):
         cylinder = Rhino.Geometry.Cylinder(circle, 1)
         return cylinder.ToBrep(True, True)
 
-gem = Gem( 5 )
-gem.setPosition( 0, 20, 0 )
-gem.setNormal( -1, -1, 0 )
-gem.draw()
+gem1 = Gem()
+gem2 = Gem()
+gem1.position.X = 15
+print( gem2.position.X )
