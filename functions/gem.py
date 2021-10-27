@@ -66,10 +66,3 @@ class Gem(obj.Object3D):
         rotation = Rhino.Geometry.Transform.Rotation(object['object3D'].normal, self.normal, self.position)
         object['brepID'] = sc.doc.Objects.Transform(object['brepID'], rotation, True)
         object['object3D'].copyNormal(self.normal)
-
-gem1 = Gem()
-# gem2 = Gem()
-
-gem1.setNormal(0, 1, 0)
-gem1.setPosition(1, 2, 3)
-gem1.setNormal(0, 0, 1)

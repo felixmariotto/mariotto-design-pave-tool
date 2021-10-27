@@ -10,7 +10,7 @@ reload(gem)
 class c:
     
     def __init__(self):
-        self.circle_center = Rhino.Geometry.Point3d(0, 0, 0)
+        self.gem_center = Rhino.Geometry.Point3d(0, 0, 0)
         self.up = Rhino.Geometry.Vector3d(0, 0, 1)
     
     # dynamic redraw callback, to update the position of the gem
@@ -18,11 +18,11 @@ class c:
     def callback(self, sender, args):
         try:
             # translate the gem
-            translation = args.CurrentPoint - self.circle_center
+            translation = args.CurrentPoint - self.gem_center
             
-            self.circle_center.X = args.CurrentPoint.X
-            self.circle_center.Y = args.CurrentPoint.Y
-            self.circle_center.Z = args.CurrentPoint.Z
+            self.gem_center.X = args.CurrentPoint.X
+            self.gem_center.Y = args.CurrentPoint.Y
+            self.gem_center.Z = args.CurrentPoint.Z
             
             xf = Rhino.Geometry.Transform.Translation(translation)
             sc.doc.Objects.Transform(self.circleID, xf, True)
@@ -44,16 +44,16 @@ class c:
     def addGem(self):
         try:
             # reset the circle position that will be updated in the callback
-            self.circle_center.X = 0
-            self.circle_center.Y = 0
-            self.circle_center.Z = 0
+            self.gem_center.X = 0
+            self.gem_center.Y = 0
+            self.gem_center.Z = 0
             
             # reset the circle up vector, which will be updated in the callback
             self.up.X = 0
             self.up.Y = 0
             self.up.Z = 1
             
-            # create a new circle
+            # create a new gem
             circle = Rhino.Geometry.Circle(1)
             self.circleID = sc.doc.Objects.AddCircle(circle)
             
