@@ -1,2 +1,2 @@
 # rhino_awesome_pave
-a set of tools to help you model gemstones pave settings in Rhino.
+a set of tools to help creating gemstones pave settings in Rhino.
