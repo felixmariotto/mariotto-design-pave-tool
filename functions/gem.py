@@ -1,11 +1,14 @@
 
 import Rhino
 import scriptcontext as sc
+import rhinoscriptsyntax as rs
 from random import random
 from imp import reload
 import obj
+import gembrep
 
 reload(obj)
+reload(gembrep)
 
 class Gem(obj.Object3D):
     
@@ -54,6 +57,7 @@ class Gem(obj.Object3D):
         brep = Rhino.Geometry.Cylinder(circle, 1).ToBrep(True, True)
         brepID = sc.doc.Objects.AddBrep(brep)
         sc.doc.Groups.AddToGroup(self.groupID, brepID)
+        print( sc.doc.Groups.GroupObjectCount(self.groupID) )
         #object3D
         object3D = obj.Object3D()
         object3D.copyPosition( self.position )
@@ -77,3 +81,7 @@ class Gem(obj.Object3D):
         rotation = Rhino.Geometry.Transform.Rotation(object['object3D'].normal, self.normal, self.position)
         object['brepID'] = sc.doc.Objects.Transform(object['brepID'], rotation, True)
         object['object3D'].copyNormal(self.normal)
+
+brep = gembrep.GemBrep()
+sc.doc.Objects.AddBrep(brep)
+sc.doc.Views.Redraw()
