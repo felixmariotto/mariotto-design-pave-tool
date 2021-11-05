@@ -46,15 +46,3 @@ class KeyPressManager():
     def addDecreaseCallback(self, callback):
         if self.handler:
             self.handler.OnDecrease.append(callback)
-
-## usage
-
-def handleIncrease():
-    print('handle increase')
-
-def handleDecrease():
-    print('handle decrease')
-
-kpm = KeyPressManager()
-kpm.addIncreaseCallback( handleIncrease )
-kpm.addDecreaseCallback( handleDecrease )

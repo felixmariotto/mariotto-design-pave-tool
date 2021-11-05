@@ -8,7 +8,6 @@ class TabContent(forms.Panel):
         #
         add_button = self.AddButton()
         remove_button = self.RemoveButton()
-        gem_size_slider = self.GemSizeSlider()
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
@@ -16,7 +15,6 @@ class TabContent(forms.Panel):
         #
         layout.AddSeparateRow(add_button, remove_button, None)
         layout.Add(None)
-        layout.Add(gem_size_slider)
         #
         self.Content = layout
     
@@ -37,24 +35,12 @@ class TabContent(forms.Panel):
         button.Text = "Remove gems"
         button.Click += self.onRemoveClick
         return button
-    
-    def onSizeChange(self, sender, e):
-        print(e)
-    
-    def GemSizeSlider(self):
-        slider = forms.Slider()
-        slider.MaxValue = 50
-        slider.MinValue = 10
-        slider.SnapToTick = True
-        slider.TickFrequency = 1
-        slider.ValueChanged += self.onSizeChange
-        return slider
 
 def Form(name, handler):
     tp = forms.TabPage()
     tp.Text = "pave " + name
     control = forms.Panel()
     control.Content = TabContent()
-    control.Content.handler = handler;
+    control.Content.handler = handler
     tp.Content = control
     return tp

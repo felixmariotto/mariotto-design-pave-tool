@@ -8,9 +8,11 @@ it to Rhino window.
 from imp import reload
 
 from ui import main
-reload(main)
-
+from ui import keymanager
 from functions import handler
+
+reload(main)
+reload(keymanager)
 reload(handler)
 
 import Rhino.UI
@@ -21,6 +23,9 @@ def rhino_awesome_pave():
     form = main.Form()
     form.Owner = Rhino.UI.RhinoEtoApp.MainWindow
     form.Show()
+    kpm = keymanager.KeyPressManager()
+    kpm.addIncreaseCallback( form.handleIncrease )
+    kpm.addDecreaseCallback( form.handleDecrease )
 
 if __name__ == '__main__':
     rhino_awesome_pave()

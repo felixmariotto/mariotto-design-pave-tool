@@ -26,6 +26,7 @@ class Form(forms.Form):
         # state management
         self.tab_count = 0
         # content
+        self.pave_tabs = []
         self.Content = self.Create()
     
     # Create the dialog content
@@ -57,6 +58,7 @@ class Form(forms.Form):
         self.tab_count += 1
         tab = pavetab.Form( str(self.tab_count), self.H() )
         self.TabControl.Pages.Add(tab)
+        self.pave_tabs.append(tab)
     
     # AddTab button click handler
     def AddTabClick(self, sender, e):
@@ -81,3 +83,11 @@ class Form(forms.Form):
         button.Text = "Delete Pave"
         button.Click += self.RemoveTabClick
         return button
+    
+    def handleIncrease(self):
+        for pave_tab in self.pave_tabs:
+            pave_tab.Content.Content.handler.handleIncrease()
+    
+    def handleDecrease(self):
+        for pave_tab in self.pave_tabs:
+            pave_tab.Content.Content.handler.handleDecrease()

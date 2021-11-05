@@ -2,7 +2,9 @@
 import Rhino
 import scriptcontext as sc
 import rhinoscriptsyntax as rs
+
 import gem
+
 from imp import reload
 
 reload(gem)
@@ -12,6 +14,14 @@ class c:
     def __init__(self):
         self.gem_center = Rhino.Geometry.Point3d(0, 0, 0)
         self.up = Rhino.Geometry.Vector3d(0, 0, 1)
+        self.onIncrease.append( self.handleAddedGemIncrease )
+        self.onDecrease.append( self.handleAddedGemDecrease )
+    
+    def handleAddedGemIncrease(self):
+        print('will increase size of added gem')
+    
+    def handleAddedGemDecrease(self):
+        print('will decrease size of added gem')
     
     # dynamic redraw callback, to update the position of the gem
     # while the user moves the cursor on the surface.
@@ -80,6 +90,7 @@ class c:
         obj_ref = go.Object(0)
         self.surf = obj_ref.Geometry().Surfaces[0]
         
+        # add gems until the user presses Escape
         while self.addGem():
             pass
         else:
