@@ -16,12 +16,15 @@ class c:
         self.up = Rhino.Geometry.Vector3d(0, 0, 1)
         self.onIncrease.append( self.handleAddedGemIncrease )
         self.onDecrease.append( self.handleAddedGemDecrease )
+        self.currentGemDiameter = 1.0
     
     def handleAddedGemIncrease(self):
-        print('will increase size of added gem')
+        self.currentGemDiameter += 0.1
+        print( self.currentGemDiameter )
     
     def handleAddedGemDecrease(self):
-        print('will decrease size of added gem')
+        self.currentGemDiameter -= 0.1
+        print( self.currentGemDiameter )
     
     # dynamic redraw callback, to update the position of the gem
     # while the user moves the cursor on the surface.
@@ -62,7 +65,7 @@ class c:
             self.up.Z = 1
             
             # create a new gem
-            self.g = gem.Gem()
+            self.g = gem.Gem(self.currentGemDiameter * 0.5)
             
             #
             gp = Rhino.Input.Custom.GetPoint()
