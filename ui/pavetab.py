@@ -7,7 +7,7 @@ class TabContent(forms.Panel):
     def __init__(self):
         #
         add_button = self.AddButton()
-        remove_button = self.AddButton()
+        remove_button = self.RemoveButton()
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
@@ -25,6 +25,15 @@ class TabContent(forms.Panel):
         button = forms.Button(MinimumSize = drawing.Size.Empty)
         button.Text = "Add gems"
         button.Click += self.OnButtonClick
+        return button
+    
+    def onRemoveClick(self, sender, e):
+        print('remove gems')
+    
+    def RemoveButton(self):
+        button = forms.Button(MinimumSize = drawing.Size.Empty)
+        button.Text = "Remove gems"
+        button.Click += self.onRemoveClick
         return button
 
 def Form(name, handler):
