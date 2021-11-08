@@ -78,3 +78,33 @@ class Gem(obj.Object3D):
         rotation = Rhino.Geometry.Transform.Rotation(object['object3D'].normal, self.normal, self.position)
         object['brepID'] = sc.doc.Objects.Transform(object['brepID'], rotation, True)
         object['object3D'].copyNormal(self.normal)
+
+#
+
+# Block base point
+base_point = Rhino.Geometry.Point3d(0, 0, 0)
+
+# Block definition name
+idef_name = "my-def"
+
+# See if block name already exists
+existing_idef = sc.doc.InstanceDefinitions.Find(idef_name, True)
+if existing_idef:
+    print "Block definition", idef_name, "already exists"
+
+# Create the gem object
+brep = gembrep.GemBrep(0.5)
+brepID = sc.doc.Objects.AddBrep(brep)
+ref = Rhino.DocObjects.ObjRef(brepID)
+geometry = ref.Object().Geometry
+attributes = ref.Object().Attributes
+
+# Add the instance definition
+idef_index = sc.doc.InstanceDefinitions.Add(idef_name, "", base_point, geometry, attributes)
+xform = Rhino.Geometry.Transform(10.0)
+sc.doc.Objects.AddInstanceObject(idef_index, xform)
+
+if idef_index<0:
+    print "Unable to create block definition", idef_name
+
+sc.doc.Views.Redraw()
