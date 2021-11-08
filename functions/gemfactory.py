@@ -11,6 +11,7 @@ reload(gembrep)
 
 # Block base point
 origin = Rhino.Geometry.Point3d(0, 0, 0)
+ot = Rhino.DocObjects.Tables.ObjectTable
 
 ###
 class GemFactory:
@@ -23,32 +24,28 @@ class GemFactory:
         if existing_idef:
             print "Block definition", self.name, "already exists"
         
-        # Create the gem object
+        # Create the gem instance definition
         brep = gembrep.GemBrep(0.5)
-        brepID = sc.doc.Objects.AddBrep(brep)
-        ref = Rhino.DocObjects.ObjRef(brepID)
-        geometry = ref.Object().Geometry
-        attributes = ref.Object().Attributes
-        
-        # Add the instance definition
+        attributes = sc.doc.CreateDefaultAttributes()
         self.idef_index = sc.doc.InstanceDefinitions.Add(self.name, "", origin, brep, attributes)
-        
-        # delete source object
-        sc.doc.Objects.Remove( ref.Object() )
+    
+    def dynamicDrawCallback(self, sender, args):
+        try:
+            sc.doc.Views.Redraw()
+            # print( args.CurrentPoint )
+            # print( self.last_instance_ID )
+            object = ot.FindId( 42, self.last_instance_ID )
+            print( object )
+        except Exception, e:
+            print(e)
     
     def makeInstance(self):
         xform = Rhino.Geometry.Transform.Identity
-        sc.doc.Objects.AddInstanceObject(self.idef_index, xform)
-        sc.doc.Views.Redraw()
+        self.last_instance_ID = sc.doc.Objects.AddInstanceObject(self.idef_index, xform)
+        
+        gp = Rhino.Input.Custom.GetPoint()
+        gp.DynamicDraw += self.dynamicDrawCallback
+        gp.Get()
 
 gemF = GemFactory( 'foo' )
 gemF.makeInstance()
-
-"""
-def callback(sender, args):
-    print( args.CurrentPoint )
-
-gp = Rhino.Input.Custom.GetPoint()
-gp.DynamicDraw += callback
-gp.Get()
-"""
