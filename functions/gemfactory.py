@@ -30,15 +30,9 @@ class GemFactory:
         
         def dynamicDrawCallback(sender, args):
             try:
-                """
-                # rotate
                 res = self.surf.ClosestPoint( args.CurrentPoint )
-                norm = self.surf.NormalAt(res[1], res[2])
-                print( norm )
-                """
-                
-                # translate
-                gem.moveAt(args.CurrentPoint)
+                norm = self.surf.NormalAt(res[1], res[2]) * -1
+                gem.move(args.CurrentPoint, norm)
                 sc.doc.Views.Redraw()
             except Exception, e:
                 print(e)
