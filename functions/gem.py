@@ -8,15 +8,16 @@ reload(obj)
 
 #
 
-identityMatrix = Rhino.Geometry.Transform.Identity
+origin = Rhino.Geometry.Point3d(0,0,0)
 
 class Gem(obj.Object3D):
     
-    def __init__(self, radius, defID):
+    def __init__(self, diameter, defID):
         super(Gem, self).__init__()
-        self.radius = radius
+        self.diameter = diameter
         self.defID = defID
-        self.instanceID = sc.doc.Objects.AddInstanceObject(defID, identityMatrix)
+        instanceMatrix = Rhino.Geometry.Transform.Scale(origin, diameter)
+        self.instanceID = sc.doc.Objects.AddInstanceObject(defID, instanceMatrix)
     
     def getInstance(self):
         return sc.doc.Objects.FindId( self.instanceID )
@@ -33,6 +34,12 @@ class Gem(obj.Object3D):
         # apply
         transform = rotTransform * transform
         sc.doc.Objects.Transform(self.instanceID, transform, True)
+    
+    def setNewDiameter(self, diameter):
+        ratio = diameter / self.diameter
+        self.diameter = diameter
+        scaleMatrix = Rhino.Geometry.Transform.Scale(self.position, ratio)
+        sc.doc.Objects.Transform(self.instanceID, scaleMatrix, True)
     
     def dispose(self):
         print('delete this instance')

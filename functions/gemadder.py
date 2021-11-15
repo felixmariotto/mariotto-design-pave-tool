@@ -13,22 +13,22 @@ class c:
     
     def __init__(self):
         self.gemfactory = gemfactory.GemFactory('test_name')
-        self.onIncrease.append( self.handleAddedGemIncrease )
-        self.onDecrease.append( self.handleAddedGemDecrease )
+        self.onIncrease.append( self.handleGemIncrease )
+        self.onDecrease.append( self.handleGemDecrease )
         self.currentGemDiameter = 1.0
     
-    def handleAddedGemIncrease(self):
+    def handleGemIncrease(self):
         self.currentGemDiameter += 0.1
-        print( self.currentGemDiameter )
+        self.gemfactory.setGemDiameter(self.currentGemDiameter)
     
-    def handleAddedGemDecrease(self):
+    def handleGemDecrease(self):
         self.currentGemDiameter -= 0.1
-        print( self.currentGemDiameter )
+        self.gemfactory.setGemDiameter(self.currentGemDiameter)
     
     def addGem(self):
         try:
             # create a new gem
-            self.gemInstance = self.gemfactory.makeGem(self.surf)
+            self.gemInstance = self.gemfactory.makeGem(self.surf, self.currentGemDiameter)
             return self.gemInstance
         except Exception, e:
             print(e)

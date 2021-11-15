@@ -3,7 +3,6 @@
 # It is used as parent class of Gem, and used internally for all the gem's
 # components (surfaces, curves...)
 
-
 import Rhino
 
 class Object3D(object):

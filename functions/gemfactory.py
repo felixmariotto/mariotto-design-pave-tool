@@ -12,6 +12,7 @@ origin = Rhino.Geometry.Point3d(0, 0, 0)
 
 ###
 class GemFactory:
+    
     def __init__(self, name):
         
         self.name = "awesome_gem - " + name
@@ -25,6 +26,10 @@ class GemFactory:
         brep = gembrep.GemBrep(0.5)
         attributes = sc.doc.CreateDefaultAttributes()
         self.idef_index = sc.doc.InstanceDefinitions.Add(self.name, "", origin, brep, attributes)
+    
+    def setGemDiameter(self, diameter):
+        if self.currentGem:
+            self.currentGem.setNewDiameter( diameter )
     
     def moveGem(self, gem):
         
@@ -45,12 +50,15 @@ class GemFactory:
         gp.Get()
         return gp.CommandResult() == Rhino.Commands.Result.Success
     
-    def makeGem(self, surface=None):
-        self.lastGem = gem.Gem(1, self.idef_index)
+    def makeGem(self, surface=None, diameter=1):
+        self.lastGem = gem.Gem(diameter, self.idef_index)
+        self.currentGem = self.lastGem
         self.surf = surface
         
         # If the last instance positioning was cancelled, we delete this instance
-        if self.moveGem(self.lastGem):
+        rs = self.moveGem(self.lastGem)
+        self.currentGem = None
+        if rs:
             return self.lastGem
         else:
             self.lastGem.dispose()
