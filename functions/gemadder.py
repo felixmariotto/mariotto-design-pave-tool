@@ -28,8 +28,8 @@ class c:
     def addGem(self):
         try:
             # create a new gem
-            self.gemInstance = self.gemfactory.makeInstance(self.surf)
-            return True
+            self.gemInstance = self.gemfactory.makeGem(self.surf)
+            return self.gemInstance
         except Exception, e:
             print(e)
     

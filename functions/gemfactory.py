@@ -28,13 +28,23 @@ class GemFactory:
     
     def dynamicDrawCallback(self, sender, args):
         try:
+            # rotate
+            res = self.surf.ClosestPoint( args.CurrentPoint )
+            norm = self.surf.NormalAt(res[1], res[2])
+            print( norm )
+            
+            # translate
             self.lastGem.moveAt(args.CurrentPoint)
             sc.doc.Views.Redraw()
         except Exception, e:
             print(e)
     
-    def makeInstance(self, surface=None):
+    def moveGem(self, gem):
+        pass
+    
+    def makeGem(self, surface=None):
         self.lastGem = gem.Gem(1, self.idef_index)
+        self.surf = surface
         
         gp = Rhino.Input.Custom.GetPoint()
         gp.DynamicDraw += self.dynamicDrawCallback
@@ -44,14 +54,7 @@ class GemFactory:
         gp.Get()
         # If the last instance positioning was cancelled, we delete this instance
         if gp.CommandResult() != Rhino.Commands.Result.Success:
-            self.gemInstance.dispose()
+            self.lastGem.dispose()
             return False
         else:
             return self.lastGem
-
-"""
-gemF = GemFactory( 'foo' )
-gemF.makeInstance()
-gemF.makeInstance()
-gemF.makeInstance()
-"""

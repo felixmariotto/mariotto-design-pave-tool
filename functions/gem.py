@@ -27,7 +27,7 @@ class Gem(obj.Object3D):
         self.copyPosition(point3d)
         sc.doc.Objects.Transform(self.instanceID, transform, True)
     
-    def gemInstance(self):
+    def dispose(self):
         print('delete this instance')
 
 """
