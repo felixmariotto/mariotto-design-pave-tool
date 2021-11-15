@@ -31,16 +31,20 @@ class GemFactory:
     
     def dynamicDrawCallback(self, sender, args):
         try:
+            instance = sc.doc.Objects.FindId( self.last_instance_ID )
+            currentPos = Rhino.Geometry.Point3d(
+                instance.InstanceXform.M03,
+                instance.InstanceXform.M13,
+                instance.InstanceXform.M23
+            )
+            print( currentPos )
             sc.doc.Views.Redraw()
-            # print( args.CurrentPoint )
-            # print( self.last_instance_ID )
-            object = ot.FindId( 42, self.last_instance_ID )
-            print( object )
         except Exception, e:
             print(e)
     
     def makeInstance(self):
-        xform = Rhino.Geometry.Transform.Identity
+        vector = Rhino.Geometry.Vector3d(2,3,4)
+        xform = Rhino.Geometry.Transform.Translation(vector)
         self.last_instance_ID = sc.doc.Objects.AddInstanceObject(self.idef_index, xform)
         
         gp = Rhino.Input.Custom.GetPoint()
