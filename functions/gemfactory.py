@@ -26,35 +26,38 @@ class GemFactory:
         attributes = sc.doc.CreateDefaultAttributes()
         self.idef_index = sc.doc.InstanceDefinitions.Add(self.name, "", origin, brep, attributes)
     
-    def dynamicDrawCallback(self, sender, args):
-        try:
-            # rotate
-            res = self.surf.ClosestPoint( args.CurrentPoint )
-            norm = self.surf.NormalAt(res[1], res[2])
-            print( norm )
-            
-            # translate
-            self.lastGem.moveAt(args.CurrentPoint)
-            sc.doc.Views.Redraw()
-        except Exception, e:
-            print(e)
-    
     def moveGem(self, gem):
-        pass
+        
+        def dynamicDrawCallback(sender, args):
+            try:
+                """
+                # rotate
+                res = self.surf.ClosestPoint( args.CurrentPoint )
+                norm = self.surf.NormalAt(res[1], res[2])
+                print( norm )
+                """
+                
+                # translate
+                gem.moveAt(args.CurrentPoint)
+                sc.doc.Views.Redraw()
+            except Exception, e:
+                print(e)
+        
+        gp = Rhino.Input.Custom.GetPoint()
+        gp.DynamicDraw += dynamicDrawCallback
+        if self.surf:
+            gp.Constrain(self.surf, False)
+        gp.PermitObjectSnap(False)
+        gp.Get()
+        return gp.CommandResult() == Rhino.Commands.Result.Success
     
     def makeGem(self, surface=None):
         self.lastGem = gem.Gem(1, self.idef_index)
         self.surf = surface
         
-        gp = Rhino.Input.Custom.GetPoint()
-        gp.DynamicDraw += self.dynamicDrawCallback
-        if surface:
-            gp.Constrain(surface, False)
-        gp.PermitObjectSnap(False)
-        gp.Get()
         # If the last instance positioning was cancelled, we delete this instance
-        if gp.CommandResult() != Rhino.Commands.Result.Success:
+        if self.moveGem(self.lastGem):
+            return self.lastGem
+        else:
             self.lastGem.dispose()
             return False
-        else:
-            return self.lastGem
