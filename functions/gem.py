@@ -1,6 +1,35 @@
 
 import Rhino
 import scriptcontext as sc
+from imp import reload
+import obj
+
+reload(obj)
+
+#
+
+identityMatrix = Rhino.Geometry.Transform.Identity
+
+class Gem(obj.Object3D):
+    
+    def __init__(self, radius, defID):
+        super(Gem, self).__init__()
+        self.radius = radius
+        self.defID = defID
+        self.instanceID = sc.doc.Objects.AddInstanceObject(defID, identityMatrix)
+    
+    def getInstance(self):
+        return sc.doc.Objects.FindId( self.instanceID )
+    
+    def moveAt(self, point3d):
+        translationVec = point3d - self.position
+        transform = Rhino.Geometry.Transform.Translation(translationVec)
+        self.copyPosition(point3d)
+        sc.doc.Objects.Transform(self.instanceID, transform, True)
+
+"""
+import Rhino
+import scriptcontext as sc
 import rhinoscriptsyntax as rs
 from random import random
 from imp import reload
@@ -108,3 +137,4 @@ if idef_index<0:
     print "Unable to create block definition", idef_name
 
 sc.doc.Views.Redraw()
+"""
