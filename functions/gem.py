@@ -26,6 +26,9 @@ class Gem(obj.Object3D):
         transform = Rhino.Geometry.Transform.Translation(translationVec)
         self.copyPosition(point3d)
         sc.doc.Objects.Transform(self.instanceID, transform, True)
+    
+    def gemInstance(self):
+        print('delete this instance')
 
 """
 import Rhino

@@ -28,26 +28,30 @@ class GemFactory:
     
     def dynamicDrawCallback(self, sender, args):
         try:
-            """
-            instance = sc.doc.Objects.FindId( self.last_instance_ID )
-            currentPos = Rhino.Geometry.Point3d(
-                instance.InstanceXform.M03,
-                instance.InstanceXform.M13,
-                instance.InstanceXform.M23
-            )
-            print( currentPos )
-            """
             self.lastGem.moveAt(args.CurrentPoint)
             sc.doc.Views.Redraw()
         except Exception, e:
             print(e)
     
-    def makeInstance(self):
+    def makeInstance(self, surface=None):
         self.lastGem = gem.Gem(1, self.idef_index)
         
         gp = Rhino.Input.Custom.GetPoint()
         gp.DynamicDraw += self.dynamicDrawCallback
+        if surface:
+            gp.Constrain(surface, False)
+        gp.PermitObjectSnap(False)
         gp.Get()
+        # If the last instance positioning was cancelled, we delete this instance
+        if gp.CommandResult() != Rhino.Commands.Result.Success:
+            self.gemInstance.dispose()
+            return False
+        else:
+            return self.lastGem
 
+"""
 gemF = GemFactory( 'foo' )
 gemF.makeInstance()
+gemF.makeInstance()
+gemF.makeInstance()
+"""
