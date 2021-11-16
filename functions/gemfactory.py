@@ -45,6 +45,7 @@ class GemFactory:
                 print(e)
         
         gp = Rhino.Input.Custom.GetPoint()
+        gp.SetCommandPrompt('Click on the polysurface to add a gem. Press SHIFT to increase and CTRL to decrease the size.')
         gp.DynamicDraw += dynamicDrawCallback
         if self.brepBase:
             gp.Constrain(self.brepBase, -1, -1, False)
