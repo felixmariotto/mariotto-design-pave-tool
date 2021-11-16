@@ -28,21 +28,24 @@ class c:
     def addGem(self):
         try:
             # create a new gem
-            self.gemInstance = self.gemfactory.makeGem(self.surf, self.currentGemDiameter)
+            self.gemInstance = self.gemfactory.makeGem(self.brepBase, self.currentGemDiameter)
             return self.gemInstance
         except Exception, e:
             print(e)
     
     def addGems(self):
-        # get the surface on which to position the gem
+        # get the brep on which to position the gem
         go = Rhino.Input.Custom.GetObject()
-        go.SetCommandPrompt('select the surface on which to orient a gem')
-        go.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
+        go.SetCommandPrompt('select the polysurface on which to orient a gem')
+        go.GeometryFilter = Rhino.DocObjects.ObjectType.Brep
         go.Get()
-        if go.CommandResult() != Rhino.Commands.Result.Success:
-            return
         obj_ref = go.Object(0)
-        self.surf = obj_ref.Geometry().Surfaces[0]
+        geom = obj_ref.Geometry()
+        if isinstance(geom, Rhino.Geometry.BrepFace):
+            brep = geom.Brep
+        else:
+            brep = geom
+        self.brepBase = brep
         
         # add gems until the user presses Escape
         while self.addGem():

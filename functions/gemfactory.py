@@ -6,6 +6,7 @@ import gembrep
 import gem
 reload(gembrep)
 reload(gem)
+import datetime
 
 # Block base point
 origin = Rhino.Geometry.Point3d(0, 0, 0)
@@ -35,8 +36,9 @@ class GemFactory:
         
         def dynamicDrawCallback(sender, args):
             try:
-                res = self.surf.ClosestPoint( args.CurrentPoint )
-                norm = self.surf.NormalAt(res[1], res[2]) * -1
+                closestFace = getClosestFace(self.brepBase.Faces, args.CurrentPoint)
+                res = closestFace.ClosestPoint(args.CurrentPoint)
+                norm = closestFace.NormalAt(res[1], res[2])
                 gem.move(args.CurrentPoint, norm)
                 sc.doc.Views.Redraw()
             except Exception, e:
@@ -44,16 +46,16 @@ class GemFactory:
         
         gp = Rhino.Input.Custom.GetPoint()
         gp.DynamicDraw += dynamicDrawCallback
-        if self.surf:
-            gp.Constrain(self.surf, False)
+        if self.brepBase:
+            gp.Constrain(self.brepBase, -1, -1, False)
         gp.PermitObjectSnap(False)
         gp.Get()
         return gp.CommandResult() == Rhino.Commands.Result.Success
     
-    def makeGem(self, surface=None, diameter=1):
+    def makeGem(self, brepBase=None, diameter=1):
         self.lastGem = gem.Gem(diameter, self.idef_index)
         self.currentGem = self.lastGem
-        self.surf = surface
+        self.brepBase = brepBase
         
         # If the last instance positioning was cancelled, we delete this instance
         rs = self.moveGem(self.lastGem)
@@ -63,3 +65,15 @@ class GemFactory:
         else:
             self.lastGem.dispose()
             return False
+
+def getClosestFace(facesEnum, point3d):
+    closestFace = None
+    closestDist = float('inf')
+    for face in facesEnum:
+        res = face.ClosestPoint( point3d )
+        closestPoint = face.PointAt(res[1], res[2])
+        dist = point3d.DistanceTo(closestPoint)
+        if dist < closestDist:
+            closestDist = dist
+            closestFace = face
+    return closestFace
