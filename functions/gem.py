@@ -42,4 +42,4 @@ class Gem(obj.Object3D):
         sc.doc.Objects.Transform(self.instanceID, scaleMatrix, True)
     
     def dispose(self):
-        print('delete this instance')
+        sc.doc.Objects.Remove(self.getInstance())
