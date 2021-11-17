@@ -20,8 +20,8 @@ class TabContent(forms.Panel):
         layout.DefaultSpacing = drawing.Size(5, 5)
         layout.Padding = drawing.Padding(10)
         #
+        layout.AddSeparateRow(forms.Label(Text = 'Pave name:'), self.pave_text)
         layout.AddSeparateRow(add_button, remove_button, None)
-        layout.AddSeparateRow(self.pave_text, None)
         layout.Add(None)
         #
         self.Content = layout
