@@ -20,7 +20,6 @@ class c:
         # See if block name already exists
         self.gem_instance_def = sc.doc.InstanceDefinitions.Find(name, True)
         if not self.gem_instance_def:
-            print('create def')
             brep = gembrep.GemBrep(0.5)
             attributes = sc.doc.CreateDefaultAttributes()
             self.idef_index = sc.doc.InstanceDefinitions.Add(name, "", origin, brep, attributes)
@@ -33,4 +32,4 @@ class c:
                 i += 1
     
     def updateGemDefName(self, newName):
-        print('update definition with new name :', newName)
+        sc.doc.InstanceDefinitions.Modify(self.idef_index, newName, "", True)
