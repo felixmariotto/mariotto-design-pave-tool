@@ -53,6 +53,7 @@ class TabContent(forms.Panel):
     
     def onPaveTextChange(self, sender, e):
         self.tab_page.Text = e.NewText
+        self.handler.updateName(e.NewText)
     
     def PaveText(self, string):
         text_box = forms.TextBox()
@@ -65,7 +66,7 @@ def Form(name, handler):
     tab_page.Text = "pave " + name
     control = forms.Panel()
     control.Content = TabContent()
-    control.Content.setTabPage(tab_page)
     control.Content.setHandler(handler)
+    control.Content.setTabPage(tab_page)
     tab_page.Content = control
     return tab_page

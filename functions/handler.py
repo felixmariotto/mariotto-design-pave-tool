@@ -28,3 +28,6 @@ class Handler(gemadder.c, notes.c):
     def handleDecrease(self): # triggered when the user press Ctrl
         for callback in self.onDecrease:
             callback()
+    
+    def updateName(self, newName):
+        print('set new name', newName)
