@@ -15,7 +15,7 @@ reload(main)
 reload(keymanager)
 reload(handler)
 
-import Rhino.UI
+import Rhino
 
 main.Form.H = handler.Handler
 

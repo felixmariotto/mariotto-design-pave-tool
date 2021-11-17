@@ -14,7 +14,7 @@ origin = Rhino.Geometry.Point3d(0, 0, 0)
 
 class c:
     def __init__(self):
-        self.name = 'test-name'
+        self.name = 'rhino_awesome_pave_' + 'testname'
         
         # See if block name already exists
         self.gem_instance_def = sc.doc.InstanceDefinitions.Find(self.name, True)

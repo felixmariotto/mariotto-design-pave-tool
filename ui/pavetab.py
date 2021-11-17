@@ -63,7 +63,7 @@ class TabContent(forms.Panel):
 
 def Form(name, handler):
     tab_page = forms.TabPage()
-    tab_page.Text = "pave " + name
+    tab_page.Text = name
     control = forms.Panel()
     control.Content = TabContent()
     control.Content.setHandler(handler)

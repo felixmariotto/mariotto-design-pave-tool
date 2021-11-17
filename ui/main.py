@@ -3,6 +3,8 @@
 main UI module of rhino_awesome_pave.
 """
 
+import scriptcontext as sc
+
 import System
 import Eto.Forms as forms
 import Eto.Drawing as drawing
@@ -31,10 +33,16 @@ class Form(forms.Form):
     
     # Create the dialog content
     def Create(self):
-        # create default tab
         self.TabControl = forms.TabControl()
         self.TabControl.TabPosition = forms.DockPosition.Top
-        self.CreateTab()
+        # Look for instance definitions with a reserved name.
+        # For each of them we create a pave tab.
+        for instanceDef in sc.doc.InstanceDefinitions:
+            if instanceDef.HasName and instanceDef.Name.find('rh_awe_pav') > -1:
+                self.CreateTab(instanceDef.Name)
+        # create default tab if no old pave was found
+        if self.tab_count == 0:
+            self.CreateTab()
         # create stack layout item for tabs
         tab_items = forms.StackLayoutItem(self.TabControl, True)
         # create layout for buttons
@@ -54,16 +62,16 @@ class Form(forms.Form):
         return layout
     
     # add a new tab to self.TabControl
-    def CreateTab(self):
+    def CreateTab(self, name=None):
         self.tab_count += 1
+        name = name or 'rh_awe_pav_' + str(self.tab_count)
         # here we pass in an instance of Handler (functions/handler.py)
-        tab = pavetab.Form( str(self.tab_count), self.H() )
+        tab = pavetab.Form( name, self.H() )
         self.TabControl.Pages.Add(tab)
         self.pave_tabs.append(tab)
     
     # AddTab button click handler
     def AddTabClick(self, sender, e):
-        print( self.TabControl.Pages[0].Text )
         self.CreateTab()
     
     # Creates an add tab button
