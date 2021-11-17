@@ -62,6 +62,9 @@ class TabContent(forms.Panel):
         return text_box
 
 def Form(name, handler):
+    # this will link an instance definition to the pave
+    handler.findOrCreateGemDef(name)
+    #
     tab_page = forms.TabPage()
     tab_page.Text = name
     control = forms.Panel()
