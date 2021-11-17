@@ -9,18 +9,21 @@ which is the functional module for handling the pave in the scene.
 import Eto.Forms as forms
 import Eto.Drawing as drawing
 
+# used for string operations
+prefix = 'rh_awe_pav_'
+
 class TabContent(forms.Panel):
 
     def __init__(self):
         add_button = self.AddButton()
         remove_button = self.EditButton()
-        self.pave_text = self.PaveText('test')
+        self.pave_text_input = self.PaveText('test')
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
         layout.Padding = drawing.Padding(10)
         #
-        layout.AddSeparateRow(forms.Label(Text = 'Pave name:'), self.pave_text)
+        layout.AddSeparateRow(forms.Label(Text = 'Pave name:'), self.pave_text_input)
         layout.AddSeparateRow(add_button, remove_button, None)
         layout.Add(None)
         #
@@ -31,7 +34,7 @@ class TabContent(forms.Panel):
     
     def setTabPage(self, tab_page):
         self.tab_page = tab_page
-        self.pave_text.Text = tab_page.Text
+        self.pave_text_input.Text = tab_page.Text.replace(prefix, '', 1)
     
     def OnButtonClick(self, sender, e):
         self.handler.addGems()
@@ -52,8 +55,8 @@ class TabContent(forms.Panel):
         return button
     
     def onPaveTextChange(self, sender, e):
-        self.tab_page.Text = e.NewText
-        self.handler.updateName(e.NewText)
+        self.tab_page.Text = prefix + e.NewText
+        self.handler.updateName(prefix + e.NewText)
     
     def PaveText(self, string):
         text_box = forms.TextBox()
@@ -63,7 +66,7 @@ class TabContent(forms.Panel):
 
 def Form(name, handler):
     # this will link an instance definition to the pave
-    handler.findOrCreateGemDef(name)
+    handler.updateName(name)
     #
     tab_page = forms.TabPage()
     tab_page.Text = name

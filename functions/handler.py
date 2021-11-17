@@ -17,6 +17,7 @@ reload( gemdef )
 class Handler(gemadder.c, notes.c, gemdef.c):
     
     def __init__(self):
+        self.name = None
         self.gems = []
         self.onIncrease = []
         self.onDecrease = []
@@ -33,4 +34,8 @@ class Handler(gemadder.c, notes.c, gemdef.c):
             callback()
     
     def updateName(self, newName):
-        self.updateGemDefName(newName)
+        if not self.name:
+            self.findOrCreateGemDef(newName)
+        else:
+            self.updateGemDefName(newName)
+        self.name = newName

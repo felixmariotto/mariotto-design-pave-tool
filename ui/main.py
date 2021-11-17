@@ -38,7 +38,7 @@ class Form(forms.Form):
         # Look for instance definitions with a reserved name.
         # For each of them we create a pave tab.
         for instanceDef in sc.doc.InstanceDefinitions:
-            if instanceDef.HasName and instanceDef.Name.find('rh_awe_pav') > -1:
+            if instanceDef.HasName and instanceDef.Name.find('rh_awe_pav_') > -1:
                 self.CreateTab(instanceDef.Name)
         # create default tab if no old pave was found
         if self.tab_count == 0:
