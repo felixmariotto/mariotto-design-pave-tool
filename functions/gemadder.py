@@ -29,6 +29,7 @@ class c:
         try:
             # create a new gem
             self.gemInstance = self.gemfactory.makeGem(self.brepBase, self.currentGemDiameter)
+            self.writeData() # from notes.py module
             return self.gemInstance
         except Exception, e:
             print(e)

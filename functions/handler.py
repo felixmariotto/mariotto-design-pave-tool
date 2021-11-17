@@ -7,15 +7,19 @@ One handler is responsible for one pave.
 from imp import reload
 
 import gemadder
-reload( gemadder )
+import notes
 
-class Handler(gemadder.c):
+reload( gemadder )
+reload( notes )
+
+class Handler(gemadder.c, notes.c):
     
     def __init__(self):
         self.gems = []
         self.onIncrease = []
         self.onDecrease = []
         gemadder.c.__init__(self)
+        notes.c.__init__(self)
     
     def handleIncrease(self): # triggered when the user press Shift
         for callback in self.onIncrease:
