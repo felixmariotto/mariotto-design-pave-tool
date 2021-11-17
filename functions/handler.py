@@ -33,4 +33,4 @@ class Handler(gemadder.c, notes.c, gemdef.c):
             callback()
     
     def updateName(self, newName):
-        print('set new name', newName)
+        self.updateGemDefName(newName)
