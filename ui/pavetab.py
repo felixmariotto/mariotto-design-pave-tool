@@ -12,18 +12,26 @@ import Eto.Drawing as drawing
 class TabContent(forms.Panel):
 
     def __init__(self):
-        #
         add_button = self.AddButton()
         remove_button = self.EditButton()
+        self.pave_text = self.PaveText('test')
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
         layout.Padding = drawing.Padding(10)
         #
         layout.AddSeparateRow(add_button, remove_button, None)
+        layout.AddSeparateRow(self.pave_text, None)
         layout.Add(None)
         #
         self.Content = layout
+    
+    def setHandler(self, handler):
+        self.handler = handler
+    
+    def setTabPage(self, tab_page):
+        self.tab_page = tab_page
+        self.pave_text.Text = tab_page.Text
     
     def OnButtonClick(self, sender, e):
         self.handler.addGems()
@@ -42,12 +50,22 @@ class TabContent(forms.Panel):
         button.Text = "Edit gems"
         button.Click += self.onEditClick
         return button
+    
+    def onPaveTextChange(self, sender, e):
+        self.tab_page.Text = e.NewText
+    
+    def PaveText(self, string):
+        text_box = forms.TextBox()
+        text_box.Text = string
+        text_box.TextChanging += self.onPaveTextChange
+        return text_box
 
 def Form(name, handler):
-    tp = forms.TabPage()
-    tp.Text = "pave " + name
+    tab_page = forms.TabPage()
+    tab_page.Text = "pave " + name
     control = forms.Panel()
     control.Content = TabContent()
-    control.Content.handler = handler
-    tp.Content = control
-    return tp
+    control.Content.setTabPage(tab_page)
+    control.Content.setHandler(handler)
+    tab_page.Content = control
+    return tab_page
