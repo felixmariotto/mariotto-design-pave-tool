@@ -1,4 +1,11 @@
 
+"""
+UI panel that's responsible for interaction with one pave setting.
+This panel is duplicated for each new pave setting.
+When instanced with Form(), it get passed an instance of Handler,
+which is the functional module for handling the pave in the scene.
+"""
+
 import Eto.Forms as forms
 import Eto.Drawing as drawing
 
@@ -7,7 +14,7 @@ class TabContent(forms.Panel):
     def __init__(self):
         #
         add_button = self.AddButton()
-        remove_button = self.RemoveButton()
+        remove_button = self.EditButton()
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
@@ -27,13 +34,13 @@ class TabContent(forms.Panel):
         button.Click += self.OnButtonClick
         return button
     
-    def onRemoveClick(self, sender, e):
-        print('remove gems')
+    def onEditClick(self, sender, e):
+        print('edit gems')
     
-    def RemoveButton(self):
+    def EditButton(self):
         button = forms.Button(MinimumSize = drawing.Size.Empty)
-        button.Text = "Remove gems"
-        button.Click += self.onRemoveClick
+        button.Text = "Edit gems"
+        button.Click += self.onEditClick
         return button
 
 def Form(name, handler):
