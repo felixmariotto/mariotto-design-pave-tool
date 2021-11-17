@@ -1,4 +1,10 @@
 
+"""
+This module is responsible for writting and reading information in the 3dm file.
+We want information about pave settings to be recoverable when you close Rhino
+and reopen it.
+"""
+
 import scriptcontext as sc
 
 # sc.doc.Notes

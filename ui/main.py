@@ -56,6 +56,7 @@ class Form(forms.Form):
     # add a new tab to self.TabControl
     def CreateTab(self):
         self.tab_count += 1
+        # here we pass in an instance of Handler (functions/handler.py)
         tab = pavetab.Form( str(self.tab_count), self.H() )
         self.TabControl.Pages.Add(tab)
         self.pave_tabs.append(tab)

@@ -1,4 +1,8 @@
 
+"""
+Module responsible for adding gems to the pave, according to user input.
+"""
+
 import Rhino
 import scriptcontext as sc
 import rhinoscriptsyntax as rs
