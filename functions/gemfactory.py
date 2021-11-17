@@ -2,32 +2,15 @@
 import Rhino
 import scriptcontext as sc
 from imp import reload
-import gembrep
 import gem
-reload(gembrep)
 reload(gem)
-import datetime
-
-# Block base point
-origin = Rhino.Geometry.Point3d(0, 0, 0)
 
 ###
 class GemFactory:
     
-    def __init__(self, name):
+    def __init__(self, gemadder):
+        self.gemadder = gemadder
         
-        self.name = "awesome_gem - " + name
-        
-        # See if block name already exists
-        existing_idef = sc.doc.InstanceDefinitions.Find(self.name, True)
-        if existing_idef:
-            print "Block definition", self.name, "already exists"
-        
-        # Create the gem instance definition
-        brep = gembrep.GemBrep(0.5)
-        attributes = sc.doc.CreateDefaultAttributes()
-        self.idef_index = sc.doc.InstanceDefinitions.Add(self.name, "", origin, brep, attributes)
-    
     def setGemDiameter(self, diameter):
         if self.currentGem:
             self.currentGem.setNewDiameter( diameter )
@@ -54,7 +37,7 @@ class GemFactory:
         return gp.CommandResult() == Rhino.Commands.Result.Success
     
     def makeGem(self, brepBase=None, diameter=1):
-        self.lastGem = gem.Gem(diameter, self.idef_index)
+        self.lastGem = gem.Gem(diameter, self.gemadder.idef_index)
         self.currentGem = self.lastGem
         self.brepBase = brepBase
         

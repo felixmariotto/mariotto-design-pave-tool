@@ -16,7 +16,7 @@ reload(gemfactory)
 class c:
     
     def __init__(self):
-        self.gemfactory = gemfactory.GemFactory('test_name')
+        self.gemfactory = gemfactory.GemFactory(self)
         self.onIncrease.append( self.handleGemIncrease )
         self.onDecrease.append( self.handleGemDecrease )
         self.currentGemDiameter = 1.0
