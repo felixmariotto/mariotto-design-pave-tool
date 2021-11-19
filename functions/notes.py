@@ -14,7 +14,9 @@ class c:
         pass
     
     def writeData(self):
-        print('write data in notes')
+        pass
+        # print('write data in notes')
     
     def readData(self):
-        print('read data in notes')
+        pass
+        # print('read data in notes')
