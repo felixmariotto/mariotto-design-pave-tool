@@ -10,21 +10,21 @@ import Eto.Forms as forms
 import Eto.Drawing as drawing
 
 # used for string operations
-prefix = 'rh_awe_pav_'
+prefix = 'mariotto_pave_'
 
 class TabContent(forms.Panel):
 
     def __init__(self):
         add_button = self.AddButton()
-        remove_button = self.EditButton()
-        self.pave_text_input = self.PaveText('test')
+        edit_button = self.EditButton()
+        self.pave_text_input = self.PaveText('pave name')
         #
         layout = forms.DynamicLayout()
         layout.DefaultSpacing = drawing.Size(5, 5)
         layout.Padding = drawing.Padding(10)
         #
         layout.AddSeparateRow(forms.Label(Text = 'Pave name:'), self.pave_text_input)
-        layout.AddSeparateRow(add_button, remove_button, None)
+        layout.AddSeparateRow(add_button, edit_button, None)
         layout.Add(None)
         #
         self.Content = layout

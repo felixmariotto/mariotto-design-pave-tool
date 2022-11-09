@@ -1,6 +1,6 @@
 
 """
-main UI module of rhino_awesome_pave.
+main UI module of the software.
 """
 
 import scriptcontext as sc
@@ -21,8 +21,8 @@ class Form(forms.Form):
     # Initializer
     def __init__(self):
         # basic style
-        self.Title = "rhino_awesome_pave"
-        self.ClientSize = drawing.Size(300, 200)
+        self.Title = "Mariotto Design's pave tool"
+        self.ClientSize = drawing.Size(450, 200)
         self.Padding = drawing.Padding(10)
         self.Resizable = True
         # state management
@@ -38,7 +38,7 @@ class Form(forms.Form):
         # Look for instance definitions with a reserved name.
         # For each of them we create a pave tab.
         for instanceDef in sc.doc.InstanceDefinitions:
-            if instanceDef.HasName and instanceDef.Name.find('rh_awe_pav_') > -1:
+            if instanceDef.HasName and instanceDef.Name.find('mariotto_pave_') > -1:
                 self.CreateTab(instanceDef.Name)
         # create default tab if no old pave was found
         if self.tab_count == 0:
@@ -64,7 +64,7 @@ class Form(forms.Form):
     # add a new tab to self.TabControl
     def CreateTab(self, name=None):
         self.tab_count += 1
-        name = name or 'rh_awe_pav_' + str(self.tab_count)
+        name = name or 'mariotto_pave_' + str(self.tab_count)
         # here we pass in an instance of Handler (functions/handler.py)
         tab = pavetab.Form( name, self.H() )
         self.TabControl.Pages.Add(tab)
