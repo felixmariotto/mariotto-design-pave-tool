@@ -32,7 +32,7 @@ class GemFactory:
         gp.DynamicDraw += dynamicDrawCallback
         if self.brepBase:
             gp.Constrain(self.brepBase, -1, -1, False)
-        gp.PermitObjectSnap(False)
+        gp.PermitObjectSnap(False) # quickfix: the selection would snap on the gem brep itself otherwise, a workaround must be found to enable object snap.
         gp.Get()
         return gp.CommandResult() == Rhino.Commands.Result.Success
     

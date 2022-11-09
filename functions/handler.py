@@ -1,6 +1,6 @@
 
 """
-Hander is contructed from the different functionalities of the pave.
+Handler is contructed from the different functionalities of the pave.
 One handler is responsible for one pave.
 """
 

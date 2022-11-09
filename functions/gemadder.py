@@ -20,14 +20,17 @@ class c:
         self.onIncrease.append( self.handleGemIncrease )
         self.onDecrease.append( self.handleGemDecrease )
         self.currentGemDiameter = 1.0
+        self.allowDiamUpdate = False
     
     def handleGemIncrease(self):
-        self.currentGemDiameter += 0.1
-        self.gemfactory.setGemDiameter(self.currentGemDiameter)
+        if self.allowDiamUpdate :
+            self.currentGemDiameter += 0.1
+            self.gemfactory.setGemDiameter(self.currentGemDiameter)
     
     def handleGemDecrease(self):
-        self.currentGemDiameter -= 0.1
-        self.gemfactory.setGemDiameter(self.currentGemDiameter)
+        if self.allowDiamUpdate :
+            self.currentGemDiameter -= 0.1
+            self.gemfactory.setGemDiameter(self.currentGemDiameter)
     
     def addGem(self):
         try:
@@ -52,9 +55,13 @@ class c:
             brep = geom
         self.brepBase = brep
         
+        # allow the user to change the next diameter diameter
+        self.allowDiamUpdate = True
+        
         # add gems until the user presses Escape
         while self.addGem():
             pass
+        # do something when all gems have been positioned
         else:
-            pass
-            # do something when all gems have been positioned
+            self.allowDiamUpdate = False
+            
