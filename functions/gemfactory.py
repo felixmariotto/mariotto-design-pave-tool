@@ -1,5 +1,6 @@
 
 import Rhino
+from System.Drawing import Color
 import scriptcontext as sc
 from imp import reload
 import gem
@@ -17,7 +18,7 @@ class GemFactory:
     
     def moveGem(self, gem):
         
-        def dynamicDrawCallback(sender, args):
+        def dynamicGemMoveCallback(sender, args):
             try:
                 closestFace = getClosestFace(self.brepBase.Faces, args.CurrentPoint)
                 res = closestFace.ClosestPoint(args.CurrentPoint)
@@ -27,13 +28,26 @@ class GemFactory:
             except Exception, e:
                 print(e)
         
+        def dynamicGemTextCallback(sender, args):
+            xform = args.Viewport.GetTransform(CS.World, CS.Screen)
+            current_point = args.CurrentPoint
+            current_point.Transform(xform)
+            screen_point = Rhino.Geometry.Point2d(current_point.X, current_point.Y)
+            msg = "screen {0}, {1}".format(screen_point.X, screen_point.Y)
+            args.Display.Draw2dText(msg, Color.Blue, screen_point, False)
+        
         gp = Rhino.Input.Custom.GetPoint()
         gp.SetCommandPrompt('Click on the polysurface to add a gem. Press SHIFT to increase and CTRL to decrease the size.')
-        gp.DynamicDraw += dynamicDrawCallback
+        
+        gp.DynamicDraw += dynamicGemMoveCallback
+        gp.DynamicDraw += dynamicGemTextCallback
+        
         if self.brepBase:
             gp.Constrain(self.brepBase, -1, -1, False)
+            
         gp.PermitObjectSnap(False) # quickfix: the selection would snap on the gem brep itself otherwise, a workaround must be found to enable object snap.
         gp.Get()
+        
         return gp.CommandResult() == Rhino.Commands.Result.Success
     
     def makeGem(self, brepBase=None, diameter=1):
