@@ -44,9 +44,12 @@ class c:
     def addGems(self):
         # get the object on which to position the gem
         go = Rhino.Input.Custom.GetObject()
-        go.GeometryFilter = Rhino.DocObjects.ObjectType.Brep + Rhino.DocObjects.ObjectType.Mesh
+        # go.GeometryFilter = Rhino.DocObjects.ObjectType.Brep + Rhino.DocObjects.ObjectType.Mesh
         go.SetCommandPrompt('select the object on which to place gems')
         go.Get()
+        
+        if go.CommandResult() != Rhino.Commands.Result.Success: return
+        
         obj_ref = go.Object(0)
         geom = obj_ref.Geometry()
         
