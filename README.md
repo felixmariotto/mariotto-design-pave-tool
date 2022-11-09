@@ -9,6 +9,9 @@ It's best to open an issue before to file a large pull request.
 Please don't use the RhinoScriptSyntax API as it's too slow.
 
 # How to use
+Press Shit or Control to increase or decrease the stone you want to position
+
+# How to install
 Download this repository :   
 ![Screenshot_3](https://user-images.githubusercontent.com/46470486/142037724-3bde7826-e88d-492f-b67d-a8df447c0863.jpg)   
 Then in Rhino run `RunPythonScript` from the command line, and execute the file `rhino_awesome_pave.py` (which you will find at the root of this repository).   
