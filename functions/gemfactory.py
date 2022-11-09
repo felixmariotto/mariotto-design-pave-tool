@@ -33,8 +33,9 @@ class GemFactory:
             current_point = args.CurrentPoint
             current_point.Transform(xform)
             screen_point = Rhino.Geometry.Point2d(current_point.X, current_point.Y)
-            msg = "screen {0}, {1}".format(screen_point.X, screen_point.Y)
-            args.Display.Draw2dText(msg, Color.Blue, screen_point, False)
+            # msg = "screen {0}, {1}".format(screen_point.X, screen_point.Y)
+            msg = "  {0}".format(self.currentGem.diameter)
+            args.Display.Draw2dText(msg, Color.Blue, screen_point, False, 30)
         
         gp = Rhino.Input.Custom.GetPoint()
         gp.SetCommandPrompt('Click on the polysurface to add a gem. Press SHIFT to increase and CTRL to decrease the size.')
