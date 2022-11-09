@@ -35,25 +35,34 @@ class c:
     def addGem(self):
         try:
             # create a new gem
-            self.gemInstance = self.gemfactory.makeGem(self.brepBase, self.currentGemDiameter)
+            self.gemInstance = self.gemfactory.makeGem(self.baseObject, self.currentGemDiameter)
             self.writeData() # from notes.py module
             return self.gemInstance
         except Exception, e:
             print(e)
     
     def addGems(self):
-        # get the brep on which to position the gem
+        # get the object on which to position the gem
         go = Rhino.Input.Custom.GetObject()
-        go.SetCommandPrompt('select the polysurface on which to orient a gem')
-        go.GeometryFilter = Rhino.DocObjects.ObjectType.Brep
+        go.GeometryFilter = Rhino.DocObjects.ObjectType.Brep + Rhino.DocObjects.ObjectType.Mesh
+        go.SetCommandPrompt('select the object on which to place gems')
         go.Get()
         obj_ref = go.Object(0)
         geom = obj_ref.Geometry()
+        
+        # set baseObject depending on user's pick
         if isinstance(geom, Rhino.Geometry.BrepFace):
-            brep = geom.Brep
-        else:
-            brep = geom
-        self.brepBase = brep
+            self.baseObject = geom.Brep
+        elif isinstance(geom, Rhino.Geometry.Brep):
+            self.baseObject = geom
+        elif isinstance(geom, Rhino.Geometry.Mesh):
+            self.baseObject = geom
+        #elif isinstance(geom, Rhino.Geometry.SubDFace):
+        #    self.baseObject = geom.ParentSubD
+        #elif isinstance(geom, Rhino.Geometry.SubD):
+        #    self.baseObject = geom
+        
+        if not self.baseObject: return
         
         # allow the user to change the next diameter diameter
         self.allowDiamUpdate = True
